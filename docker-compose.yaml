@@ -19,7 +19,7 @@ services:
 
   web:
     ports:
-      - "8081:80"
+      - "${WEBSITE_PORT}:80"
     depends_on:
       db:
         condition: service_healthy

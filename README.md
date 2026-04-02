@@ -6,6 +6,13 @@ Download the 1.9.16 release from [https://github.com/layoutd/live-by-bula/releas
 
 ## Usage
 
+Create an `.env` file and change the variables in there:
+
+```bash
+cp .env.example .env
+```
+
+Then run docker:
 
 ```bash
 docker compose up --build
