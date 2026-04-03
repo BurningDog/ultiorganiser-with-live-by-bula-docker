@@ -13,7 +13,7 @@ RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/Allo
     /etc/apache2/apache2.conf
 
 # We won't need the install file because we import the database file ourselves:
-RUN rm uo-with-live-1.9.16/install.php
+RUN rm -f uo-with-live-1.9.16/install.php
 # Copy the entire folder
 COPY uo-with-live-1.9.16/ /var/www/html/
 # Config uses environment variables set in .env
