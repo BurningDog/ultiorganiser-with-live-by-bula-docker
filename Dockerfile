@@ -13,6 +13,10 @@ RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/Allo
     /etc/apache2/apache2.conf
 
 COPY uo-with-live-1.9.16/ /var/www/html/
+# We won't need the install file because we import the database file ourselves:
+RUN rm uo-with-live-1.9.16/install.php
+# Config uses environment variables set in .env
+COPY conf/config.inc.php /var/www/html/conf/
 
 # Create upload directory (not present in source) and fix permissions
 # on all directories that the app needs to write to at runtime
