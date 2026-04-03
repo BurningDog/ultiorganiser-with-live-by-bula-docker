@@ -24,8 +24,12 @@ COPY conf/config.inc.php /var/www/html/conf/
 # Create upload directory (not present in source)
 RUN mkdir -p /var/www/html/images/uploads
 
-# Patches to apply against the codebase at startup
+# Patches to apply against the codebase
 COPY patch/*.patch /patches/
+RUN for f in /patches/*.patch; do \
+      echo "Applying patch: $f"; \
+      patch -p1 -d /var/www/html < "$f"; \
+    done
 
 # Entrypoint re-applies www-data ownership at startup, after volumes are mounted
 COPY entrypoint.sh /entrypoint.sh
