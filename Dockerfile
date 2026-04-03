@@ -12,9 +12,10 @@ RUN apt-get update --assume-yes \
 RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' \
     /etc/apache2/apache2.conf
 
-COPY uo-with-live-1.9.16/ /var/www/html/
 # We won't need the install file because we import the database file ourselves:
 RUN rm uo-with-live-1.9.16/install.php
+# Copy the entire folder
+COPY uo-with-live-1.9.16/ /var/www/html/
 # Config uses environment variables set in .env
 COPY conf/config.inc.php /var/www/html/conf/
 
