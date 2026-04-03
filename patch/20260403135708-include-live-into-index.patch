@@ -1,10 +1,12 @@
 diff --git a/index.php b/index.php
-index 24e5dc7..e2f4fd5 100644
+index b600062..24e5dc7 100644
+--- a/index.php
 +++ b/index.php
-@@ -20,11 +20,6 @@ include_once $include_prefix.'lib/debug.functions.php';
+@@ -19,6 +19,12 @@ include_once $include_prefix.'lib/debug.functions.php';
+ 
  session_name(UO_SESSION_NAME);
  session_start();
- 
++
 +if (getenv('ENABLE_LIVE_BY_BULA') == true) {
 +  // Include Live! by BULA
 +  include_once __DIR__ . '/live/enable-live.php';
