@@ -18,6 +18,7 @@ services:
       start_period: 30s
 
   web:
+    build: .
     ports:
       - "${WEBSITE_PORT}:80"
     depends_on:
