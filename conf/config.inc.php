@@ -19,5 +19,3 @@ define('UO_SESSION_NAME',   getenv('UO_SESSION_NAME')    ?: 'UO-Local');
 define('HIDE_TIME',         getenv('UO_HIDE_TIME')       === 'true');
 define('PRINT_SPIRIT_SHEETS', getenv('UO_PRINT_SPIRIT_SHEETS') === 'true');
 define('DEFAULT_TIMEZONE',  getenv('UO_TIMEZONE')        ?: 'Europe/Lisbon');
-?>
-
