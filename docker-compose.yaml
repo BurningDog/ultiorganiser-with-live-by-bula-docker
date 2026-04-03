@@ -21,6 +21,18 @@ services:
     build: .
     ports:
       - "${WEBSITE_PORT}:80"
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST:-db}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ultiorganizer}
+      MYSQL_USER: ${MYSQL_USER:-ultiorganizer}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme!}
+      UO_BASEURL: ${UO_BASEURL:-http://localhost:8081}
+      UO_TIMEZONE: ${UO_TIMEZONE:-Europe/Lisbon}
+      UO_SESSION_NAME: ${UO_SESSION_NAME:-UO-Local}
+      UO_CUSTOMIZATIONS: ${UO_CUSTOMIZATIONS:-default}
+      UO_UPLOAD_DIR: ${UO_UPLOAD_DIR:-images/uploads/}
+      UO_HIDE_TIME: ${UO_HIDE_TIME:-false}
+      UO_PRINT_SPIRIT_SHEETS: ${UO_PRINT_SPIRIT_SHEETS:-false}
     depends_on:
       db:
         condition: service_healthy
