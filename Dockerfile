@@ -37,12 +37,10 @@ RUN rm -f /var/www/html/install.php
 # Config uses environment variables set in .env
 COPY conf/config.inc.php /var/www/html/conf/
 
-# Create upload directory (not present in source) and fix permissions
-# on all directories that the app needs to write to at runtime
-RUN mkdir -p /var/www/html/images/uploads \
- && chown -R www-data:www-data \
-      /var/www/html/conf \
-      /var/www/html/images/uploads \
-      /var/www/html/live/conf \
-      /var/www/html/live/data \
-      /var/www/html/live/teams
+# Create upload directory (not present in source)
+RUN mkdir -p /var/www/html/images/uploads
+
+# Entrypoint re-applies www-data ownership at startup, after volumes are mounted
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
