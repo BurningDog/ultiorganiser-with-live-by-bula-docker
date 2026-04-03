@@ -11,6 +11,10 @@ RUN apt-get update --assume-yes \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
+# Hide deprecation notices from browser output; still log them
+RUN echo "display_errors = Off\nerror_reporting = E_ALL & ~E_DEPRECATED & ~E_NOTICE\nlog_errors = On" \
+    > /usr/local/etc/php/conf.d/errors.ini
+
 # Allow .htaccess overrides for the document root
 RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' \
     /etc/apache2/apache2.conf
