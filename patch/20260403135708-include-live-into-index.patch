@@ -1,0 +1,15 @@
+diff --git a/index.php b/index.php
+index 24e5dc7..e2f4fd5 100644
++++ b/index.php
+@@ -20,11 +20,6 @@ include_once $include_prefix.'lib/debug.functions.php';
+ session_name(UO_SESSION_NAME);
+ session_start();
+ 
++if (getenv('ENABLE_LIVE_BY_BULA') == true) {
++  // Include Live! by BULA
++  include_once __DIR__ . '/live/enable-live.php';
++}
++
+ // do not log visitors (less load on the server) (Bruno edit)
+ //if (!isset($_SESSION['VISIT_COUNTER'])) {
+ //  LogVisitor($_SERVER['REMOTE_ADDR']);

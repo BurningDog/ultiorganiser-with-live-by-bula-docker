@@ -1,0 +1,39 @@
+diff --git a/lib/data.functions.php b/lib/data.functions.php
+index c037599..62e3224 100644
+--- a/lib/data.functions.php
++++ b/lib/data.functions.php
+@@ -217,7 +217,7 @@ class EventDataXMLHandler{
+   function start_tag($parser, $name, $attribs) {
+     if (is_array($attribs)) {
+       $row = array();
+-      while(list($key,$val) = each($attribs)) {
++      foreach($attribs as $key => $val) {
+         if($val=="NULL"){
+           $row[$key]="NULL";
+         }elseif(is_int($val) || $val==-1){
+diff --git a/lib/fpdf/fpdf.php b/lib/fpdf/fpdf.php
+index fac9ca2..8b9cf2f 100644
+--- a/lib/fpdf/fpdf.php
++++ b/lib/fpdf/fpdf.php
+@@ -1563,7 +1563,7 @@ function _putimages()
+ {
+ 	$filter=($this->compress) ? '/Filter /FlateDecode ' : '';
+ 	reset($this->images);
+-	while(list($file,$info)=each($this->images))
++	foreach ($this->images as $file => $info)
+ 	{
+ 		$this->_newobj();
+ 		$this->images[$file]['n']=$this->n;
+diff --git a/plugins/old/import_xml_ffindr.php b/plugins/old/import_xml_ffindr.php
+index fd1d281..e61cc97 100644
+--- a/plugins/old/import_xml_ffindr.php
++++ b/plugins/old/import_xml_ffindr.php
+@@ -136,7 +136,7 @@ class XMLHandler{
+ 
+     if (is_array($attribs)) {
+       $row = array();
+-      while(list($key,$val) = each($attribs)) {
++      foreach ($attribs as $key => $val) {
+         if($val=="NULL"){
+           $row[$key]="NULL";
+         }elseif(is_int($val) || $val==-1){
