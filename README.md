@@ -4,7 +4,7 @@ Docker setup for running [uo-with-live-1.9.16](uo-with-live-1.9.16/) (UltiOrgani
 
 Download the 1.9.16 release from [https://github.com/layoutd/live-by-bula/releases/tag/v1.9.16](https://github.com/layoutd/live-by-bula/releases/tag/v1.9.16) and unzip into a folder named `uo-with-live-1.9.16`. This is so that the Dockerfile can copy the correct folder into the container.
 
-## Setup
+## Install
 
 ```bash
 cp .env.example .env
@@ -36,18 +36,18 @@ show tables;
 
 You should see a list of tables;
 
+### Set up Ultiorganizer, add a season/tournament, access Live! by BULA
+
 Then visit [http://localhost/index.php?view=admin/serverconf](http://localhost/index.php?view=admin/serverconf) to complete the UltiOrganizer server setup.
 
-Use these values on the install form:
+First, log in by clicking the hidden link on the top right of the "Links" menu:
 
-| Field    | Value         |
-| -------- | ------------- |
-| Hostname | `db`          |
-| Username | `ultiorganizer` |
-| Password | `ultiorganizer` |
-| Database | `ultiorganizer` |
+* username: admin
+* password: admin
 
-After UltiOrganizer is set up, follow the Live! by BULA setup instructions in [../uo-with-live-1.9.16/live/README.md](../uo-with-live-1.9.16/live/README.md).
+After UltiOrganizer is set up, add a season or tournament at [http://your-site.org/?view=admin/seasons](http://your-site.org/?view=admin/seasons)
+
+Then access the Live! by BULA interface by visiting [http://your-site.org/?view=live/index](http://your-site.org/?view=live/index)
 
 ## Design decisions
 
