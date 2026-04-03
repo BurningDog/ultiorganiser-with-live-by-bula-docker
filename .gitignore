@@ -1,3 +1,5 @@
 uo-with-live-1.9.16
 .env
 .DS_Store
+# For personal use
+docker-compose.tailscale.yaml
