@@ -4,13 +4,13 @@ Docker setup for running [uo-with-live-1.9.16](uo-with-live-1.9.16/) (UltiOrgani
 
 Download the 1.9.16 release from [https://github.com/layoutd/live-by-bula/releases/tag/v1.9.16](https://github.com/layoutd/live-by-bula/releases/tag/v1.9.16) and unzip into a folder named `uo-with-live-1.9.16`. This is so that the Dockerfile can copy the correct folder into the container.
 
-## Usage
-
-Create an `.env` file and change the variables in there:
+## Setup
 
 ```bash
 cp .env.example .env
 ```
+
+and change the variables in the `.env` file.
 
 Then run docker:
 
@@ -18,7 +18,25 @@ Then run docker:
 docker compose up --build
 ```
 
-Then visit http://localhost:8081/install.php to complete the UltiOrganizer setup.
+Import the database:
+
+```bash
+docker compose exec -T db mysql \
+  -u ultiorganizer -pchangeme! ultiorganizer \
+  < uo-with-live-1.9.16/sql/ultiorganizer.sql
+```
+
+Verify the database was imported:
+
+```bash
+docker compose exec -it db mysql \
+  -u ultiorganizer -pchangeme! ultiorganizer
+show tables;
+```
+
+You should see a list of tables;
+
+Then visit [http://localhost/index.php?view=admin/serverconf](http://localhost/index.php?view=admin/serverconf) to complete the UltiOrganizer server setup.
 
 Use these values on the install form:
 
