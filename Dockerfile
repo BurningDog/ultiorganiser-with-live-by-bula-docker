@@ -14,6 +14,16 @@ RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/Allo
 
 # We won't need the install file because we import the database file ourselves:
 RUN rm -f uo-with-live-1.9.16/install.php
+
+# Hook Live! by BULA into UltiOrganizer's index.php, directly after session_start()
+RUN sed -i 's|session_start();|session_start();\
+\
+if (getenv('"'"'ENABLE_LIVE_BY_BULA'"'"') == true) {\
+  // Include Live! by BULA\
+  include_once __DIR__ . '"'"'/live/enable-live.php'"'"';\
+}\
+|' uo-with-live-1.9.16/index.php
+
 # Copy the entire folder
 COPY uo-with-live-1.9.16/ /var/www/html/
 # Config uses environment variables set in .env
