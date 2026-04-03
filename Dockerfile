@@ -1,7 +1,7 @@
 FROM php:7.4-apache
 
 RUN apt-get update --assume-yes \
- && apt-get install --assume-yes zlib1g-dev libpng-dev gettext locales \
+ && apt-get install --assume-yes zlib1g-dev libpng-dev libonig-dev gettext locales \
  && locale-gen en_GB.UTF-8 fi_FI.UTF-8 \
  && docker-php-ext-install mysqli gettext gd mbstring \
  && a2enmod rewrite \
