@@ -14,14 +14,19 @@ RUN apt-get update --assume-yes \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install Whoops error handler (used by Option 2 below)
+COPY whoops-composer.json /usr/local/lib/php-dev/composer.json
+COPY whoops-bootstrap.php /usr/local/lib/php-dev/bootstrap.php
+RUN composer install --working-dir=/usr/local/lib/php-dev --no-interaction --prefer-dist
+
 # PHP error reporting — uncomment one of the two options below:
 
 # Option 1: Hide deprecation notices from browser output; still log them
 # RUN echo "display_errors = Off\nerror_reporting = E_ALL & ~E_DEPRECATED & ~E_NOTICE\nlog_errors = On" \
 #     > /usr/local/etc/php/conf.d/errors.ini
 
-# Option 2: Show all errors on screen (useful for active development)
-RUN echo "display_errors = On\nerror_reporting = E_ALL\nlog_errors = On" \
+# Option 2: Show all errors on screen + Whoops stacktraces (active development)
+RUN echo "display_errors = On\nerror_reporting = E_ALL\nlog_errors = On\nauto_prepend_file = /usr/local/lib/php-dev/bootstrap.php" \
     > /usr/local/etc/php/conf.d/errors.ini
 
 # Allow .htaccess overrides for the document root
