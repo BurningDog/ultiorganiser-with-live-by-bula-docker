@@ -1,0 +1,74 @@
+# uo-with-live-docker
+
+Docker setup for running [uo-with-live-1.9.16](uo-with-live-1.9.16/) (UltiOrganizer + Live! by BULA 1.9.16).
+
+Download the 1.9.16 release from [https://github.com/layoutd/live-by-bula/releases/tag/v1.9.16](https://github.com/layoutd/live-by-bula/releases/tag/v1.9.16) and unzip into a folder named `uo-with-live-1.9.16`. This is so that the Dockerfile can copy the correct folder into the container.
+
+## Install
+
+```bash
+cp .env.example .env
+```
+
+and change the variables in the `.env` file.
+
+Then run docker:
+
+```bash
+docker compose up --build
+```
+
+Import the database:
+
+```bash
+docker compose exec -T db mysql \
+  -u ultiorganizer -pchangeme! ultiorganizer \
+  < uo-with-live-1.9.16/sql/ultiorganizer.sql
+```
+
+Verify the database was imported:
+
+```bash
+docker compose exec -it db mysql \
+  -u ultiorganizer -pchangeme! ultiorganizer
+show tables;
+```
+
+You should see a list of tables;
+
+### Set up Ultiorganizer, add a season/tournament, access Live! by BULA
+
+Then visit [http://localhost/index.php?view=admin/serverconf](http://localhost/index.php?view=admin/serverconf) to complete the UltiOrganizer server setup.
+
+First, log in by clicking the hidden link on the top right of the "Links" menu:
+
+* username: admin
+* password: admin
+
+After UltiOrganizer is set up, add a season or tournament at [http://your-site.org/?view=admin/seasons](http://your-site.org/?view=admin/seasons)
+
+Then access the Live! by BULA interface by visiting [http://your-site.org/?view=live/index](http://your-site.org/?view=live/index)
+
+## Design decisions
+
+**PHP 7.4-apache** — matches the Composer minimum declared by Live! by BULA; uses the official `php:7.4-apache` image which bundles Apache.
+
+**MySQL 8.0** with `--default-authentication-plugin=mysql_native_password` — required for older PHP mysqli to connect without authentication errors. MySQL 8 changed the default auth plugin to `caching_sha2_password`, which breaks legacy clients.
+
+**Build context is `..`** (the `ultimate-frisbee/` parent directory) so Docker can `COPY uo-with-live-1.9.16/` into the image. Docker build contexts cannot reference parent directories, so the context must be widened to the parent.
+
+**Port 8081** — avoids clashing with the main `ultiorganizer` container which uses 8080.
+
+**`AllowOverride All`** — patched into the Apache config via `sed` so the existing `.htaccess` URL rewriting works correctly.
+
+**`images/uploads/`** — created in the image at build time; the directory does not exist in the source tree but `install.php` defaults to it as the upload path.
+
+**Writable directories** — five directories need to be writable by PHP at runtime. Four are mapped to Docker volumes so data survives container recreation; one is left ephemeral:
+
+| Directory         | Contents                                                                             | Volume                                     |
+| ----------------- | ------------------------------------------------------------------------------------ | ------------------------------------------ |
+| `conf/`           | UltiOrganizer `config.inc.php` written by `install.php` (DB credentials, settings)  | `uo-conf`                                  |
+| `images/uploads/` | User-uploaded images (team logos, player photos)                                     | `${UPLOADS_FOLDER}` (bind mount, set in `.env`) |
+| `live/conf/`      | Live! by BULA `local-config.json` written by the admin panel (season, URLs, theme)  | `live-conf`                                |
+| `live/teams/`     | Team photo `.jpg` files uploaded for Live! by BULA team pages                        | `live-teams`                               |
+| `live/data/`      | File-based JSON cache — auto-regenerated from the DB on every request                | None (ephemeral)                           |

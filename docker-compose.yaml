@@ -1,0 +1,51 @@
+services:
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme!}
+      MYSQL_DATABASE: ${MYSQL_DATABASE-ultiorganizer}
+      MYSQL_USER: ${MYSQL_USER:-ultiorganizer}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme!}
+    ports:
+      - ${MYSQL_PORT:-3306}:3306
+    restart: unless-stopped
+    volumes:
+      - ${MYSQL_DATABASE_FOLDER:-db-data}:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-changeme!}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  web:
+    build: .
+    ports:
+      - "${WEBSITE_PORT}:80"
+    environment:
+      ENABLE_LIVE_BY_BULA: ${ENABLE_LIVE_BY_BULA:-false}
+      MYSQL_HOST: ${MYSQL_HOST:-db}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ultiorganizer}
+      MYSQL_USER: ${MYSQL_USER:-ultiorganizer}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme!}
+      UO_BASEURL: ${UO_BASEURL:-http://localhost:8081}
+      UO_TIMEZONE: ${UO_TIMEZONE:-Europe/Lisbon}
+      UO_SESSION_NAME: ${UO_SESSION_NAME:-UO-Local}
+      UO_CUSTOMIZATIONS: ${UO_CUSTOMIZATIONS:-default}
+      UO_UPLOAD_DIR: ${UO_UPLOAD_DIR:-images/uploads/}
+      UO_HIDE_TIME: ${UO_HIDE_TIME:-false}
+      UO_PRINT_SPIRIT_SHEETS: ${UO_PRINT_SPIRIT_SHEETS:-false}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ${UO_CONF_FOLDER}:/var/www/html/conf
+      - ${UO_UPLOADS_FOLDER}:/var/www/html/images/uploads
+      - ${LIVE_CONF_FOLDER}:/var/www/html/live/conf
+      - ${LIVE_TEAMS_FOLDER}:/var/www/html/live/teams
+      - ${LIVE_DATA_FOLDER}:/var/www/html/live/data/
+
+volumes:
+  db-data:
