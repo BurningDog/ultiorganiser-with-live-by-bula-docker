@@ -47,11 +47,6 @@ RUN for f in /patches/*.patch; do \
       patch --batch -p1 -d /var/www/html < "$f"; \
     done
 
-# Copy the Symfony migrations console and install its dependencies
-COPY symfony/ /var/www/html/symfony/
-RUN chmod +x /var/www/html/symfony/bin/console \
- && composer install --working-dir=/var/www/html/symfony --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
 # Entrypoint re-applies www-data ownership at startup, after volumes are mounted
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
