@@ -1,7 +1,7 @@
 FROM php:8.2-apache
 
 RUN apt-get update --assume-yes \
- && apt-get install --assume-yes zlib1g-dev libpng-dev libonig-dev gettext locales patch \
+ && apt-get install --assume-yes zlib1g-dev libpng-dev libonig-dev gettext locales patch unzip \
  # need git to get the commit information for the build if it's present
  # But the Live! by BULA codebase does not include a git commit history
  # && apt-get install --assume-yes git \
