@@ -1,5 +1,8 @@
 uo-with-live-1.9.16
 .env
+.envrc
+.php-cs-fixer.dist.php
 .DS_Store
 # For personal use
 docker-compose.tailscale.yaml
+whoops/vendor
