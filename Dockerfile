@@ -15,8 +15,8 @@ RUN apt-get update --assume-yes \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install Whoops error handler (used by Option 2 below)
-COPY whoops-composer.json /usr/local/lib/php-dev/composer.json
-COPY whoops-bootstrap.php /usr/local/lib/php-dev/bootstrap.php
+COPY whoops/composer.json /usr/local/lib/php-dev/composer.json
+COPY whoops/bootstrap.php /usr/local/lib/php-dev/bootstrap.php
 RUN composer install --working-dir=/usr/local/lib/php-dev --no-interaction --prefer-dist
 
 # PHP error reporting — uncomment one of the two options below:
